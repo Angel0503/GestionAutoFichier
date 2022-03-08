@@ -7,16 +7,24 @@ chemin=$(pwd)
 jour=$1
 mois=$2
 annee=$3
+erreur=false
 
+#Transforme la variable jour en jour conforme :
+	# -Rajoute un 0 devant si le jour est compris entre 1 et 9
+	# -Verifie que le jour entré soit bien entre 1 et 31
 conversionJour() {
-
-	if [ $jour -lt 10 ]
-	then
-		jour="0"$jour
-	fi
-	echo $jour
+	if [ $erreur = "false" ]; then 
+		if [ $jour -lt 1 ]; then
+			echo "Erreur jour : jour inférieur à 1"
+		elif [ $jour -gt 31 ]; then
+			echo "Erreur jour : jour supérieur à 31"
+		elif [ $jour -lt 10 ]; then
+			jour="0"$jour
+		fi
+		echo $jour
+	fi	
 }
-#conversionJour
+
 
 conversionMois() {
 
@@ -61,11 +69,13 @@ newName() {
 getDate() {
 	date '+%Y_%m_%d'
 }
+#getDate
 
 #Créer un dossier avec la date passé en parametre
 #-> Forcément 3 arguments : 1er pour le jour, 2eme pour le mois, 3eme pour l'année
 if [ $# -eq 3 ]; then
 	nomFic=$(newName)
+	echo $nomFic
 	if [ ! -d "Reunions/$nomFic" ]; then
 		nomFic=$(newName)
 		mkdir Reunions/$nomFic
@@ -73,6 +83,8 @@ if [ $# -eq 3 ]; then
 
 		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
 		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
+
+		echo "Dossier créé à la date donnée"
 	else
 		echo "Dossier deja existant"
 	fi
