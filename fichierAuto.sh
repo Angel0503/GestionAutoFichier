@@ -51,7 +51,6 @@ conversionMois() {
 #conversionMois
 
 newName() {
-
 	jour=$(conversionJour)
 	mois=$(conversionMois)
 	nomFic=$annee"_"$mois"_"$jour"_""test"
@@ -59,15 +58,22 @@ newName() {
 }
 #newName
 
-nomFic=$(newName)
-if [ ! -d "Reunions/$nomFic" ]; then
-	mkdir Reunions/$nomFic
+
+if [ $n -ne 0 ]; then
+	if [ ! -d "Reunions/$nomFic" ]; then
+		echo Different de zero
+		nomFic=$(newName)
+		mkdir Reunions/$nomFic
+		cp $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_CR.docx $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic
+
+		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
+		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
+	else
+		echo "Fichier deja existant"
+	fi
+elif [ $n -eq 0 ]; then
+	echo pas args
+	echo $DATE
 else
-	echo "Fichier deja existant"
+	echo rien
 fi
-
-cp $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_CR.docx $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic
-
-mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
-mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
-
