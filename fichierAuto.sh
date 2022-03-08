@@ -82,6 +82,7 @@ elif [ $# -eq 0 ] && [ ! -d "Reunions/$(getDate)" ]; then
 
 	mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
 	mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
+elif [ $# -eq 1 ] && 
 else
 	echo "Fichier d'aujourd'hui déjà créé ou mauvais arguments"
 fi
