@@ -82,12 +82,14 @@ elif [ $# -eq 0 ] && [ ! -d "Reunions/$(getDate)" ]; then
 
 	mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
 	mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
-elif [ $# -eq 1 ] && [ $1 -eq "delete" ]; then
-	if [ ! -d "Reunions/$(getDate)" ]; then
-		rm -r Reunions/$(getDate)
-		echo "Dossier d'aujourd'hui supprimmé"
-	else
-		echo "Le dossier d'aujourd'hui n'existe pas"
+elif [ $# -eq 1 ] ; then
+	if [ "$1" = "-d" ] || [ "$1" = "--delete" ] ; then
+		if [ -d "Reunions/$(getDate)" ]; then
+			rm -r Reunions/$(getDate)
+			echo "Dossier d'aujourd'hui supprimmé"
+		else
+			echo "Le dossier d'aujourd'hui n'existe pas"
+		fi
 	fi
 else
 	echo "Dossier d'aujourd'hui déjà créé ou mauvais arguments"
