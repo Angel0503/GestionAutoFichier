@@ -72,17 +72,23 @@ if [ $# -eq 3 ]; then
 		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
 		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
 	else
-		echo "Fichier deja existant"
+		echo "Dossier deja existant"
 	fi
 elif [ $# -eq 0 ] && [ ! -d "Reunions/$(getDate)" ]; then
-	echo pas args
+	echo "Dossier du jour créé"
 	nomFic=$(getDate)
 	mkdir Reunions/$nomFic
 	cp $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_CR.docx $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic
 
 	mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
 	mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
-elif [ $# -eq 1 ] && 
+elif [ $# -eq 1 ] && [ $1 -eq "delete" ]; then
+	if [ ! -d "Reunions/$(getDate)" ]; then
+		rm -r Reunions/$(getDate)
+		echo "Dossier d'aujourd'hui supprimmé"
+	else
+		echo "Le dossier d'aujourd'hui n'existe pas"
+	fi
 else
-	echo "Fichier d'aujourd'hui déjà créé ou mauvais arguments"
+	echo "Dossier d'aujourd'hui déjà créé ou mauvais arguments"
 fi
