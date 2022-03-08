@@ -62,6 +62,8 @@ getDate() {
 	date '+%Y_%m_%d'
 }
 
+#Créer un dossier avec la date passé en parametre
+#-> Forcément 3 arguments : 1er pour le jour, 2eme pour le mois, 3eme pour l'année
 if [ $# -eq 3 ]; then
 	nomFic=$(newName)
 	if [ ! -d "Reunions/$nomFic" ]; then
@@ -74,14 +76,23 @@ if [ $# -eq 3 ]; then
 	else
 		echo "Dossier deja existant"
 	fi
-elif [ $# -eq 0 ] && [ ! -d "Reunions/$(getDate)" ]; then
-	echo "Dossier du jour créé"
-	nomFic=$(getDate)
-	mkdir Reunions/$nomFic
-	cp $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_CR.docx $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic
 
-	mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
-	mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
+#Créer un dossier avec la date du jour
+elif [ $# -eq 0 ]; then
+	if [ ! -d "Reunions/$(getDate)" ]; then
+		nomFic=$(getDate)
+		mkdir Reunions/$nomFic
+		cp $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_CR.docx $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic
+
+		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
+		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
+
+		echo "Dossier du jour créé"
+	else
+		echo "Le dossier du jour existe déjà"
+	fi
+
+#Supprimer le dossier du jour
 elif [ $# -eq 1 ] ; then
 	if [ "$1" = "-d" ] || [ "$1" = "--delete" ] ; then
 		if [ -d "Reunions/$(getDate)" ]; then
@@ -91,6 +102,7 @@ elif [ $# -eq 1 ] ; then
 			echo "Le dossier d'aujourd'hui n'existe pas"
 		fi
 	fi
+
 else
-	echo "Dossier d'aujourd'hui déjà créé ou mauvais arguments"
+	echo "Mauvais arguments"
 fi
