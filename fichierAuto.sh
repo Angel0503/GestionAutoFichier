@@ -7,7 +7,7 @@ chemin=$(pwd)
 jour=$1
 mois=$2
 annee=$3
-erreur=false
+erreur=0
 liste=("janvier fevrier février mars avril mai juin juillet aout août septembre octobre novembre decembre décembre")
 
 
@@ -15,18 +15,18 @@ liste=("janvier fevrier février mars avril mai juin juillet aout août septembr
 	# -Rajoute un 0 devant si le jour est compris entre 1 et 9
 	# -Verifie que le jour entré soit bien entre 1 et 31
 conversionJour() {
-	if [ $erreur = "false" ]; then 
+	if [ $erreur -eq 0 ]; then 
 		if [ $jour -lt 1 ]; then
-			erreur=true
+			erreur=1
 			echo "Erreur jour : jour inférieur à 1"
 		elif [ $jour -gt 31 ]; then
-			erreur=true
+			erreur=1
 			echo "Erreur jour : jour supérieur à 31"
 		elif [ $jour -lt 10 ]; then
 			jour="0"$jour
 		fi
 	fi	
-	if [ $erreur = "false" ]; then
+	if [ $erreur -eq 0 ]; then
 		echo $jour
 	fi
 }
@@ -46,7 +46,7 @@ function exists_in_list() {
 }
 
 conversionMois() {
-	if [ $erreur = "false" ]; then 
+	if [ $erreur -eq 0 ]; then 
 		if exists_in_list "$liste" " " janvier; then
 			case $mois in
 			"janvier") mois="01"
@@ -81,7 +81,7 @@ conversionMois() {
 			;;
 			esac
 		else
-			erreur=true
+			erreur=1
 		fi
 	fi
 	echo $mois
@@ -89,7 +89,7 @@ conversionMois() {
 #conversionMois
 
 newName() {
-	if [ $erreur = false ]; then
+	if [ $erreur -eq 0 ]; then
 		jour=$(conversionJour)
 		mois=$(conversionMois)
 		nomFic=$annee"_"$mois"_"$jour
@@ -108,7 +108,7 @@ echo $erreur
 if [ $# -eq 3 ]; then
 	nomFic=$(newName)
 	echo $nomFic
-	if [ $erreur = false ]; then
+	if [ $erreur -eq 0 ]; then
 		if [ ! -d "Reunions/$nomFic" ]; then
 			nomFic=$(newName)
 			mkdir Reunions/$nomFic
