@@ -7,30 +7,26 @@ chemin=$(pwd)
 jour=$1
 mois=$2
 annee=$3
-erreur=0
 listeMois=("janvier fevrier février mars avril mai juin juillet aout août septembre octobre novembre decembre décembre")
 
 #Transforme la variable jour en jour conforme :
 	# -Rajoute un 0 devant si le jour est compris entre 1 et 9
 	# -Verifie que le jour entré soit bien entre 1 et 31
 conversionJour() {
-	if [ $erreur -eq 0 ]; then 
-		if [ $jour -lt 1 ]; then
-			echo "Erreur jour : jour inférieur à 1"
-			return 1
-			exit 1
-		elif [ $jour -gt 31 ]; then
-			echo "Erreur jour : jour supérieur à 31"
-			return 1
-			exit 1
-		elif [ $jour -lt 10 ]; then
-			jour="0"$jour
-		fi
-	fi	
-	if [ $erreur -eq 0 ]; then
-		echo $jour
-		return 0
+	if [ $jour -lt 1 ]; then
+		echo "Erreur jour : jour inférieur à 1"
+		return 1
+		exit 1
+	elif [ $jour -gt 31 ]; then
+		echo "Erreur jour : jour supérieur à 31"
+		return 1
+		exit 1
+	elif [ $jour -lt 10 ]; then
+		jour="0"$jour
 	fi
+
+	echo $jour
+	return 0
 }
 
 #Fonction qui permet de vérifier si un élément est dans une liste
@@ -48,55 +44,64 @@ function exists_in_list() {
 }
 
 conversionMois() {
-	if [ $erreur -eq 0 ]; then 
-		if exists_in_list "$listeMois" " " janvier; then
-			case $mois in
-			"janvier") mois="01"
-			;;
-			"fevrier") mois="02"
-			;;
-			"février") mois="02"
-			;;
-			"mars") mois="03"
-			;;
-			"avril") mois="04"
-			;;
-			"mai") mois="05"
-			;;
-			"juin") mois="06"
-			;;
-			"juillet") mois="07"
-			;;
-			"aout") mois="08"
-			;;
-			"août") mois="08"
-			;;
-			"septembre") mois="09"
-			;;
-			"octobre") mois="10"
-			;;
-			"novembre") mois="11"
-			;;
-			"decembre") mois="12"
-			;;
-			"décembre") mois="12"
-			;;
-			esac
-		else
-			erreur=1
-		fi
+	if exists_in_list "$listeMois" " " janvier; then
+		case $mois in
+		"janvier") mois="01"
+		;;
+		"fevrier") mois="02"
+		;;
+		"février") mois="02"
+		;;
+		"mars") mois="03"
+		;;
+		"avril") mois="04"
+		;;
+		"mai") mois="05"
+		;;
+		"juin") mois="06"
+		;;
+		"juillet") mois="07"
+		;;
+		"aout") mois="08"
+		;;
+		"août") mois="08"
+		;;
+		"septembre") mois="09"
+		;;
+		"octobre") mois="10"
+		;;
+		"novembre") mois="11"
+		;;
+		"decembre") mois="12"
+		;;
+		"décembre") mois="12"
+		;;
+		esac
+	else
+		return 1
+		exit 1
 	fi
 	echo $mois
+	return 0
 }
 #conversionMois
 
 newName() {
 	if [ conversionJour ]; then
 		jour=$(conversionJour)
+		if [ conversionMois ]; then
+			mois=$(conversionMois)
+			nomFic=$annee"_"$mois"_"$jour
+		else 
+			return 1
+			exit 1
+		fi
+	else
+		return 1
+		exit 1
 	fi
-	mois=$(conversionMois)
-	nomFic=$annee"_"$mois"_"$jour
 	echo $nomFic
+	return 0
 }
 #newName
 
@@ -108,8 +113,8 @@ getDate() {
 #Créer un dossier avec la date passé en parametre
 #-> Forcément 3 arguments : 1er pour le jour, 2eme pour le mois, 3eme pour l'année
 if [ $# -eq 3 ]; then
-	nomFic=$(newName)
-	if [ $erreur -eq 0 ]; then
+	if [ newName ]; then
+		nomFic=$(newName)
 		if [ ! -d "Reunions/$nomFic" ]; then
 			nomFic=$(newName)
 			mkdir Reunions/$nomFic
@@ -123,6 +128,7 @@ if [ $# -eq 3 ]; then
 			echo "Dossier deja existant"
 		fi
 	fi
+
 #Créer un dossier avec la date du jour
 elif [ $# -eq 0 ]; then
 	if [ ! -d "Reunions/$(getDate)" ]; then
