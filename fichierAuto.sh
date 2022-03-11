@@ -8,8 +8,7 @@ jour=$1
 mois=$2
 annee=$3
 erreur=0
-liste=("janvier fevrier février mars avril mai juin juillet aout août septembre octobre novembre decembre décembre")
-
+listeMois=("janvier fevrier février mars avril mai juin juillet aout août septembre octobre novembre decembre décembre")
 
 #Transforme la variable jour en jour conforme :
 	# -Rajoute un 0 devant si le jour est compris entre 1 et 9
@@ -17,17 +16,20 @@ liste=("janvier fevrier février mars avril mai juin juillet aout août septembr
 conversionJour() {
 	if [ $erreur -eq 0 ]; then 
 		if [ $jour -lt 1 ]; then
-			erreur=1
 			echo "Erreur jour : jour inférieur à 1"
+			return 1
+			exit 1
 		elif [ $jour -gt 31 ]; then
-			erreur=1
 			echo "Erreur jour : jour supérieur à 31"
+			return 1
+			exit 1
 		elif [ $jour -lt 10 ]; then
 			jour="0"$jour
 		fi
 	fi	
 	if [ $erreur -eq 0 ]; then
 		echo $jour
+		return 0
 	fi
 }
 
@@ -47,7 +49,7 @@ function exists_in_list() {
 
 conversionMois() {
 	if [ $erreur -eq 0 ]; then 
-		if exists_in_list "$liste" " " janvier; then
+		if exists_in_list "$listeMois" " " janvier; then
 			case $mois in
 			"janvier") mois="01"
 			;;
@@ -89,12 +91,12 @@ conversionMois() {
 #conversionMois
 
 newName() {
-	if [ $erreur -eq 0 ]; then
+	if [ conversionJour ]; then
 		jour=$(conversionJour)
-		mois=$(conversionMois)
-		nomFic=$annee"_"$mois"_"$jour
-		echo $nomFic
 	fi
+	mois=$(conversionMois)
+	nomFic=$annee"_"$mois"_"$jour
+	echo $nomFic
 }
 #newName
 
@@ -102,12 +104,11 @@ getDate() {
 	date '+%Y_%m_%d'
 }
 #getDate
-echo $erreur
+
 #Créer un dossier avec la date passé en parametre
 #-> Forcément 3 arguments : 1er pour le jour, 2eme pour le mois, 3eme pour l'année
 if [ $# -eq 3 ]; then
 	nomFic=$(newName)
-	echo $nomFic
 	if [ $erreur -eq 0 ]; then
 		if [ ! -d "Reunions/$nomFic" ]; then
 			nomFic=$(newName)
