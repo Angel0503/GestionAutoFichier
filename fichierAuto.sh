@@ -15,18 +15,14 @@ listeMois=("janvier fevrier février mars avril mai juin juillet aout août sept
 conversionJour() {
 	if [ $jour -lt 1 ]; then
 		echo "Erreur jour : jour inférieur à 1"
-		return 1
-		exit 1
+		jour="erreur"
 	elif [ $jour -gt 31 ]; then
 		echo "Erreur jour : jour supérieur à 31"
-		return 1
-		exit 1
+		jour="erreur"
 	elif [ $jour -lt 10 ]; then
 		jour="0"$jour
 	fi
-
 	echo $jour
-	return 0
 }
 
 #Fonction qui permet de vérifier si un élément est dans une liste
@@ -78,30 +74,21 @@ conversionMois() {
 		;;
 		esac
 	else
-		return 1
-		exit 1
+		mois="erreur"
 	fi
 	echo $mois
-	return 0
 }
 #conversionMois
 
 newName() {
-	if [ conversionJour ]; then
-		jour=$(conversionJour)
+	jour=$(conversionJour)
+	if [ "$jour" != "erreur" ]; then
+		mois=$(conversionMois)
 		if [ conversionMois ]; then
-			mois=$(conversionMois)
 			nomFic=$annee"_"$mois"_"$jour
-		else 
-			return 1
-			exit 1
+			echo $nomFic
 		fi
-	else
-		return 1
-		exit 1
 	fi
-	echo $nomFic
-	return 0
 }
 #newName
 
@@ -113,20 +100,18 @@ getDate() {
 #Créer un dossier avec la date passé en parametre
 #-> Forcément 3 arguments : 1er pour le jour, 2eme pour le mois, 3eme pour l'année
 if [ $# -eq 3 ]; then
-	if [ newName ]; then
-		nomFic=$(newName)
-		if [ ! -d "Reunions/$nomFic" ]; then
-			nomFic=$(newName)
-			mkdir Reunions/$nomFic
-			cp $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_CR.docx $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic
+	nomFic=$(newName)
+	if [ ! -d "Reunions/$nomFic" ]; then
+		mkdir Reunions/$nomFic
 
-			mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
-			mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
+		cp $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_CR.docx $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic
 
-			echo "Dossier créé à la date donnée"
-		else
-			echo "Dossier deja existant"
-		fi
+		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
+		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
+
+		echo "Dossier créé à la date donnée"
+	else
+		echo "Dossier deja existant"
 	fi
 
 #Créer un dossier avec la date du jour
