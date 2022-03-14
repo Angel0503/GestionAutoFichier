@@ -33,14 +33,14 @@ function exists_in_list() {
     LIST_WHITESPACES=`echo $LIST | tr "$DELIMITER" " "`
     for x in $LIST_WHITESPACES; do
         if [ "$x" = "$VALUE" ]; then
-            return 0
+            return 1
         fi
     done
-    return 1
+    return 0
 }
 
 conversionMois() {
-	if exists_in_list "$listeMois" " " janvier; then
+	if [ exists_in_list "$listeMois" " " janvier ]; then
 		case $mois in
 		"janvier") mois="01"
 		;;
@@ -82,13 +82,19 @@ conversionMois() {
 
 newName() {
 	jour=$(conversionJour)
-	if [ "$jour" != "erreur" ]; then
+	if [ $jour != "erreur" ]; then
 		mois=$(conversionMois)
-		if [ conversionMois ]; then
+		if [ $mois != "erreur" ]; then
 			nomFic=$annee"_"$mois"_"$jour
-			echo $nomFic
+		else
+			echo "Jour bon mais mauvais mois"
+			nomFic="erreur"
 		fi
+	else
+		echo "Mauvais jour"
+		nomFic="erreur"
 	fi
+	echo $nomFic
 }
 #newName
 
@@ -101,17 +107,21 @@ getDate() {
 #-> Forcément 3 arguments : 1er pour le jour, 2eme pour le mois, 3eme pour l'année
 if [ $# -eq 3 ]; then
 	nomFic=$(newName)
-	if [ ! -d "Reunions/$nomFic" ]; then
-		mkdir Reunions/$nomFic
+	if [ nomFic != "erreur" ];then
+		if [ ! -d "Reunions/$nomFic" ]; then
+			mkdir Reunions/$nomFic
 
-		cp $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_CR.docx $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic
+			cp $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_CR.docx $chemin/CompteRendu-OrdreJour/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic
 
-		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
-		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
+			mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
+			mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
 
-		echo "Dossier créé à la date donnée"
+			echo "Dossier créé à la date donnée"
+		else
+			echo "Dossier deja existant"
+		fi
 	else
-		echo "Dossier deja existant"
+		echo "Date saisie incorrecte"
 	fi
 
 #Créer un dossier avec la date du jour
