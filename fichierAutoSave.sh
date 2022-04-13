@@ -12,7 +12,7 @@ listeMois=("janvier fevrier février mars avril mai juin juillet aout août sept
 #Transforme la variable jour en jour conforme :
 	# -Rajoute un 0 devant si le jour est compris entre 1 et 9
 	# -Verifie que le jour entré soit bien entre 1 et 31
-function conversionJour {
+conversionJour() {
 	if [ $jour -lt 1 ]; then
 		echo "Erreur jour : jour inférieur à 1"
 		jour="erreur"
@@ -25,18 +25,22 @@ function conversionJour {
 	echo $jour
 }
 
-
-function estMois {
-  if [[ $listeMois =~ (^|[[:space:]])"$mois"($|[[:space:]]) ]]
-  then
-    return 0
-  else
+#Fonction qui permet de vérifier si un élément est dans une liste
+function exists_in_list() {
+    LIST=$1
+    DELIMITER=$2
+    VALUE=$3
+    LIST_WHITESPACES=`echo $LIST | tr "$DELIMITER" " "`
+    for x in $LIST_WHITESPACES; do
+        if [ "$x" = "$VALUE" ]; then
+            return 0
+        fi
+    done
     return 1
-  fi
 }
 
 conversionMois() {
-	if estMois; then
+	if exists_in_list "$listeMois" " " janvier; then
 		case $mois in
 		"janvier") mois="01"
 		;;
@@ -69,6 +73,8 @@ conversionMois() {
 		"décembre") mois="12"
 		;;
 		esac
+	else
+		mois="erreur"
 	fi
 	echo $mois
 }
@@ -105,7 +111,6 @@ if [ $# -eq 3 ]; then
 
 		echo "Dossier créé à la date donnée"
 	else
-		echo $nomFic
 		echo "Dossier deja existant"
 	fi
 

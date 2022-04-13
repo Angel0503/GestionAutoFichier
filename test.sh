@@ -12,19 +12,14 @@ function conversionJour {
     if [ $jour -lt 10 ]
     then
       jour="0$jour"
+      echo $jour
+    else
+      jour=$jour
+      echo $jour
     fi
     return 0
   fi
 }
-
-#
-# if conversionJour
-# then
-  #   echo "Oui"
-  #   echo $jour
-  # else
-  #   echo "non !"
-  # fi
 
 
 function estMois {
@@ -36,10 +31,59 @@ function estMois {
   fi
 }
 
+conversionMois() {
+	if estMois; then
+		case $mois in
+		"janvier") mois="01"
+		;;
+		"fevrier") mois="02"
+		;;
+		"février") mois="02"
+		;;
+		"mars") mois="03"
+		;;
+		"avril") mois="04"
+		;;
+		"mai") mois="05"
+		;;
+		"juin") mois="06"
+		;;
+		"juillet") mois="07"
+		;;
+		"aout") mois="08"
+		;;
+		"août") mois="08"
+		;;
+		"septembre") mois="09"
+		;;
+		"octobre") mois="10"
+		;;
+		"novembre") mois="11"
+		;;
+		"decembre") mois="12"
+		;;
+		"décembre") mois="12"
+		;;
+		esac
+	fi
+	echo $mois
+}
+
+newName() {
+	jour=$(conversionJour)
+	if [ "$jour" != " " ]; then
+		mois=$(conversionMois)
+		if [ conversionMois ]; then
+			nomFic=$annee"_"$mois"_"$jour
+			echo $nomFic
+		fi
+	fi
+}
 
 if conversionJour && estMois
 then
-  echo "zojfaz"
+  test=$(newName)
+  echo $test
 else
   echo "aled"
 fi
