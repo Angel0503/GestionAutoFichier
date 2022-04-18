@@ -36,53 +36,51 @@ function estMois {
 }
 
 conversionMois() {
-	if estMois; then
-		case $mois in
-		"janvier") mois="01"
-		;;
-		"fevrier") mois="02"
-		;;
-		"février") mois="02"
-		;;
-		"mars") mois="03"
-		;;
-		"avril") mois="04"
-		;;
-		"mai") mois="05"
-		;;
-		"juin") mois="06"
-		;;
-		"juillet") mois="07"
-		;;
-		"aout") mois="08"
-		;;
-		"août") mois="08"
-		;;
-		"septembre") mois="09"
-		;;
-		"octobre") mois="10"
-		;;
-		"novembre") mois="11"
-		;;
-		"decembre") mois="12"
-		;;
-		"décembre") mois="12"
-		;;
-		esac
-	fi
+	
+	case $mois in
+	"janvier") mois="01"
+	;;
+	"fevrier") mois="02"
+	;;
+	"février") mois="02"
+	;;
+	"mars") mois="03"
+	;;
+	"avril") mois="04"
+	;;
+	"mai") mois="05"
+	;;
+	"juin") mois="06"
+	;;
+	"juillet") mois="07"
+	;;
+	"aout") mois="08"
+	;;
+	"août") mois="08"
+	;;
+	"septembre") mois="09"
+	;;
+	"octobre") mois="10"
+	;;
+	"novembre") mois="11"
+	;;
+	"decembre") mois="12"
+	;;
+	"décembre") mois="12"
+	;;
+	esac
+
 	echo $mois
 }
 #conversionMois
 
 newName() {
 	jour=$(conversionJour)
-	if [ "$jour" != "erreur" ]; then
-		mois=$(conversionMois)
-		if [ conversionMois ]; then
-			nomFic=$annee"_"$mois"_"$jour
-			echo $nomFic
-		fi
-	fi
+	
+	mois=$(conversionMois)
+		
+	nomFic=$annee"_"$mois"_"$jour
+	echo $nomFic
 }
 #newName
 
@@ -94,7 +92,16 @@ getDate() {
 #Créer un dossier avec la date passé en parametre
 #-> Forcément 3 arguments : 1er pour le jour, 2eme pour le mois, 3eme pour l'année
 if [ $# -eq 3 ]; then
-	nomFic=$(newName)
+	if [ $(conversionJour) != "erreur" ]; then
+		if [ $(estMois) ]; then
+			nomFic=$(newName)
+		else
+			echo "Erreur : mois non conforme"
+		fi
+	else
+		echo "Erreur : jour non conforme"
+	fi
+
 	if [ ! -d "Reunions/$nomFic" ]; then
 		mkdir Reunions/$nomFic
 
