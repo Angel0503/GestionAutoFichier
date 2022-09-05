@@ -25,16 +25,6 @@ function conversionJour {
 	echo $jour
 }
 
-
-function estMois {
-  if [[ $listeMois =~ (^|[[:space:]])"$mois"($|[[:space:]]) ]]
-  then
-    return 0
-  else
-    return 1
-  fi
-}
-
 conversionMois() {
 	
 	case $mois in
@@ -68,6 +58,9 @@ conversionMois() {
 	;;
 	"décembre") mois="12"
 	;;
+	*)
+	mois="erreur"
+	;;
 	esac
 
 	echo $mois
@@ -93,8 +86,8 @@ getDate() {
 #-> Forcément 3 arguments : 1er pour le jour, 2eme pour le mois, 3eme pour l'année
 if [ $# -eq 3 ]; then
 	if [ $(conversionJour) != "erreur" ]; then
-		if [ $(estMois) ]; then
-			nomFic=$(newName)
+		if [ $(conversionMois) != "erreur" ]; then
+			nomFic=$(newName)		
 		else
 			echo "Erreur : mois non conforme"
 		fi
@@ -110,7 +103,7 @@ if [ $# -eq 3 ]; then
 		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_CR.docx $chemin/Reunions/$nomFic/$nomFic"_CR".docx
 		mv $chemin/Reunions/$nomFic/AAAA_MM_JJ_ODJ.docx $chemin/Reunions/$nomFic/$nomFic"_ODJ".docx
 
-		echo "Dossier créé à la date donnée"
+		echo "Création du dossier $nomFic"
 	else
 		echo $nomFic
 		echo "Dossier deja existant"
