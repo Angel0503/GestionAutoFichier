@@ -110,6 +110,7 @@ if [ $# -eq 3 ]; then
 	fi
 
 #Créer un dossier avec la date du jour
+# -> Pas d'argument à donner
 elif [ $# -eq 0 ]; then
 	if [ ! -d "Reunions/$(getDate)" ]; then
 		nomFic=$(getDate)
