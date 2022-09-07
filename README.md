@@ -1,5 +1,7 @@
 # GestionAutoFichier
 
+GestionAutoFichier est un script bash permettant de créer des dossiers de réunion avec une nomenclature particulière (ex : aaaa_mm_jj) contenant un fichier d'ordre du jour et un fichier de compte rendu à compléter.
+
 ## Utiliser le script
 
 #### Créer un dossier pour le jour même
