@@ -134,8 +134,13 @@ elif [ $# -eq 1 ] ; then
 		else
 			echo "Le dossier d'aujourd'hui n'existe pas"
 		fi
+	elif [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
+		echo "Utilisation : ./fichierAuto.sh [jour] [mois] [année] -> Créer un dossier avec la date donnée en parametre avec les fichiers de réunions prévu"
+		echo "Si aucun argument n'est donné, le dossier du jour sera créé"
+		echo "Si l'argument -d ou --delete est donné, le dossier du jour sera supprimé"
+		echo "Si l'argument -h ou --help est donné, l'aide sera affichée"
 	fi
-
+	
 else
 	echo "Mauvais arguments"
 fi
