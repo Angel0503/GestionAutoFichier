@@ -28,3 +28,15 @@ OU
 ./fichierAuto.sh --delete
 ```
 
+#### Faire appel a l'aide
+
+```bash
+./fichierAuto.sh -h
+```
+
+OU
+
+```bash
+./fichierAuto.sh --help
+```
+
