@@ -105,7 +105,6 @@ if [ $# -eq 3 ]; then
 
 		echo "Création du dossier $nomFic"
 	else
-		echo $nomFic
 		echo "Dossier deja existant"
 	fi
 
