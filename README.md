@@ -10,7 +10,7 @@ GestionAutoFichier est un script bash permettant de créer des dossiers de réun
 ./fichierAuto.sh
 ```
 
-#### Créer un dossier pour un jour donnée
+#### Créer un dossier pour un jour donnée (ne marche pas encore)
 
 ```bash
 ./fichierAuto.sh jour mois annee
